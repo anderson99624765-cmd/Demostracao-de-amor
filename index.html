@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 Anos de Amor - Nossa História</title>
+    
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração de Cores Personalizadas no Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: '#722F37',
+                        gold: '#D4AF37',
+                        softpink: '#FFF0F5',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                        cursive: ['"Great Vibes"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fontes do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Estilos Customizados e Animações */
+        body {
+            overflow-x: hidden;
+            background-color: #FFF0F5; /* Soft Pink */
+            color: #333;
+        }
+
+        /* Efeito Parallax no Hero */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Classes para o Scroll Reveal (Fade-in ao rolar) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Corações seguindo o cursor */
+        .cursor-heart {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.2rem;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 9999;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+        }
+
+        /* Linha do tempo animada */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #D4AF37; /* Gold */
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .timeline-line { left: 20px; }
+            .timeline-item-left, .timeline-item-right { width: 100% !important; padding-left: 50px !important; text-align: left !important; }
+            .timeline-dot { left: 20px !important; transform: translateX(-50%) !important; }
+        }
+
+        /* Cartões Flip (Motivos) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flip-card:hover .flip-card-inner, .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Efeito Máquina de Escrever */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #722F37;
+            vertical-align: middle;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Lightbox da Galeria */
+        #lightbox {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Ocultar barra de rolagem onde necessário */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Botão Pulsante */
+        .btn-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-wine selection:text-white relative">
+
+    <!-- Canvas para Partículas de Fundo (Corações caindo) -->
+    <canvas id="particles-bg" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Player de Música -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- INSIRA O LINK DA SUA MÚSICA AQUI (src) -->
+        <audio id="bg-music" loop>
+            <source src="./assets/Bebê Confesso 2 - MC Kadu.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+        <button id="music-toggle" class="bg-white/90 backdrop-blur text-wine w-14 h-14 rounded-full shadow-lg border border-gold/30 flex items-center justify-center text-xl hover:scale-110 transition-transform focus:outline-none">
+            <i class="fas fa-play"></i>
+        </button>
+    </div>
+
+    <!-- 1. TELA DE ABERTURA (HERO) -->
+    <!-- INSIRA A URL DA SUA FOTO PRINCIPAL NO background-image ABAIXO -->
+    <section id="hero" class="relative h-screen flex flex-col items-center justify-center text-center px-4 parallax-bg bg-gray-900" 
+             style="background-image: url('./assets/nos.jpg');">
+        <!-- Overlay escuro para destacar o texto -->
+        <div class="absolute inset-0 bg-black/50 z-0"></div>
+        
+        <div class="relative z-10 text-white max-w-4xl opacity-0 animate-[fadeIn_2s_ease-out_1s_forwards]">
+            <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight drop-shadow-lg">
+                Para a mulher que transformou minha vida em um lugar chamado felicidade <span class="text-red-500">❤️</span>
+            </h1>
+            <p class="font-sans text-lg md:text-2xl font-light mb-12 tracking-wide text-gray-200">
+                17 de Julho de 2026 — Celebrando 9 anos da nossa história.
+            </p>
+            <button onclick="document.getElementById('historia').scrollIntoView({behavior: 'smooth'})" 
+                    class="bg-wine text-white px-8 py-4 rounded-full font-serif text-lg tracking-wider uppercase shadow-lg shadow-wine/30 border border-white/20 hover:bg-white hover:text-wine hover:border-wine transition-all duration-300 btn-pulse">
+                Começar nossa história
+            </button>
+        </div>
+        <!-- Setinha animada para baixo -->
+        <div class="absolute bottom-10 z-10 animate-bounce text-white/70">
+            <i class="fas fa-chevron-down text-3xl"></i>
+        </div>
+    </section>
+
+    <!-- 2. NOSSA HISTÓRIA (TIMELINE) -->
+    <section id="historia" class="py-24 relative z-10 bg-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-cursive text-5xl md:text-6xl text-wine mb-2">Nossa História</h2>
+                <div class="h-1 w-24 bg-gold mx-auto rounded-full"></div>
+            </div>
+
+            <div class="relative">
+                <div class="timeline-line"></div>
+
+                <!-- Momento 1 -->
+                <div class="relative flex justify-between items-center w-full mb-16 reveal">
+                    <div class="hidden md:block w-5/12"></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gold rounded-full border-4 border-white shadow z-10 timeline-dot"></div>
+                    <div class="w-full md:w-5/12 timeline-item-right text-left">
+                        <div class="bg-softpink p-6 rounded-2xl shadow-sm border border-gold/20 hover:shadow-md transition-shadow">
+                            <span class="text-gold font-bold text-sm tracking-widest uppercase mb-1 block">O Início</span>
+                            <h3 class="text-2xl font-serif text-wine mb-3">❤️ O inicio de tudo
+                            </h3>
+                            <!-- Substitua o src pela sua foto -->
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center text-gray-500 relative">
+                                <img src="./assets/inicio.jpg" alt="Nos conhecemos" class="object-cover w-full h-full absolute inset-0">
+                                <span></span>
+                            </div>
+                            <p class="text-gray-600 font-light leading-relaxed">Foi quando entendi que o que eu sentia por você era muito maior do que eu imaginava.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Momento 2 -->
+                <div class="relative flex justify-between items-center w-full mb-16 reveal">
+                    <div class="w-full md:w-5/12 timeline-item-left text-right md:text-right">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gold/20 hover:shadow-md transition-shadow">
+                            <span class="text-gold font-bold text-sm tracking-widest uppercase mb-1 block">Fomos morar juntos</span>
+                            <h3 class="text-2xl font-serif text-wine mb-3"> Decidimos construir uma vida juntos</h3>
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center text-gray-500 relative">
+                                <img src="./assets/primeira casa.jpg" alt="Noivado/Casamento" class="object-cover w-full h-full absolute inset-0">
+                                <span></span>
+                            </div>
+                            <p class="text-gray-600 font-light leading-relaxed">Quando metemos o louco e alugamos uma casinha para morar, mesmo não tendo móveis e com tão pouca coisa. Mas, ainda assim, fomos. E, no fim, isso foi o que fez tudo valer a pena.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-wine rounded-full border-4 border-white shadow z-10 timeline-dot"></div>
+                    <div class="hidden md:block w-5/12"></div>
+                </div>
+
+                <!-- Momento 3 -->
+                <div class="relative flex justify-between items-center w-full mb-16 reveal">
+                    <div class="hidden md:block w-5/12"></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gold rounded-full border-4 border-white shadow z-10 timeline-dot"></div>
+                    <div class="w-full md:w-5/12 timeline-item-right text-left">
+                        <div class="bg-softpink p-6 rounded-2xl shadow-sm border border-gold/20 hover:shadow-md transition-shadow">
+                            <span class="text-gold font-bold text-sm tracking-widest uppercase mb-1 block">Conforto</span>
+                            <h3 class="text-2xl font-serif text-wine mb-3">✨ Momentos inesquecíveis</h3>
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center text-gray-500 relative">
+                                <img src="./assets/momento.jpg" alt="Viagem" class="object-cover w-full h-full absolute inset-0">
+                                <span></span>
+                            </div>
+                            <p class="text-gray-600 font-light leading-relaxed">Quando você deita no meu peito e dorme, eu sinto que estou exatamente onde deveria estar.
+</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Momento 4 -->
+                <div class="relative flex justify-between items-center w-full mb-16 reveal">
+                    <div class="w-full md:w-5/12 timeline-item-left text-right md:text-right">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gold/20 hover:shadow-md transition-shadow">
+                            <span class="text-gold font-bold text-sm tracking-widest uppercase mb-1 block">Nosso Maior Presente</span>
+                            <h3 class="text-2xl font-serif text-wine mb-3">👨‍👩‍👧 Nossa família</h3>
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center text-gray-500 relative">
+                                <img src="./assets/nos.jpg" alt="Família" class="object-cover w-full h-full absolute inset-0">
+                                <span></span>
+                            </div>
+                            <p class="text-gray-600 font-light leading-relaxed">O ninho de amor que construímos ficou completo com a chegada da nossa filha. Ver a mãe incrível, amorosa e dedicada que você é, multiplica o meu amor todos os dias.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-wine rounded-full border-4 border-white shadow z-10 timeline-dot"></div>
+                    <div class="hidden md:block w-5/12"></div>
+                </div>
+
+                <!-- Momento 5 -->
+                <div class="relative flex justify-between items-center w-full reveal">
+                    <div class="hidden md:block w-5/12"></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gold rounded-full border-4 border-white shadow z-10 timeline-dot"></div>
+                    <div class="w-full md:w-5/12 timeline-item-right text-left">
+                        <div class="bg-softpink p-6 rounded-2xl shadow-sm border border-gold/20 hover:shadow-md transition-shadow">
+                            <span class="text-gold font-bold text-sm tracking-widest uppercase mb-1 block">Hoje</span>
+                            <h3 class="text-2xl font-serif text-wine mb-3">❤️ Celebrando 9 anos de amor</h3>
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center text-gray-500 relative">
+                                <img src="./assets/eu e ela.jpg" alt="Hoje" class="object-cover w-full h-full absolute inset-0">
+                                <span></span>
+                            </div>
+                            <p class="text-gray-600 font-light leading-relaxed">E aqui estamos nós. Mais fortes, mais apaixonados e com a certeza de que nossa história está apenas nos melhores capítulos.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. GALERIA DE FOTOS (MASONRY GRID) -->
+    <section class="py-24 bg-softpink relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-cursive text-5xl md:text-6xl text-wine mb-2">Nossos Momentos</h2>
+                <div class="h-1 w-24 bg-gold mx-auto rounded-full"></div>
+                <p class="text-gray-500 mt-4 font-light">Uma coleção de sorrisos que dividimos (clique para ampliar).</p>
+            </div>
+
+            <!-- Grid Masonry usando columns do Tailwind -->
+            <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 reveal">
+                <!-- Para adicionar mais fotos, basta copiar e colar o bloco de imagem abaixo e mudar o src -->
+                
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momentos.jpg" alt="Momento 1" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momento2.jpg" alt="Momento 2" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momento 3.jpg" alt="Momento 3" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momento  4.jpg" alt="Momento 4" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momento 5.jpg" alt="Momento 5" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid relative group cursor-pointer rounded-xl overflow-hidden shadow-sm" onclick="openLightbox(this)">
+                    <img src="./assets/momento6.png" alt="Momento 6" class="w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-wine/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Lightbox (Escondido por padrão) -->
+    <div id="lightbox" class="fixed inset-0 bg-black/90 z-[100] hidden items-center justify-center opacity-0">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:text-gold transition-colors">
+            &times;
+        </button>
+        <img id="lightbox-img" src="" alt="Imagem ampliada" class="max-w-[90%] max-h-[90vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300">
+    </div>
+
+    <!-- 4. CARTA DE AMOR (TYPING EFFECT) -->
+    <section class="py-24 bg-white relative z-10">
+        <div class="container mx-auto px-4 max-w-3xl text-center reveal" id="letter-section">
+            <i class="fas fa-envelope-open-text text-5xl text-gold mb-6"></i>
+            <div class="bg-[#fcfaf5] p-8 md:p-12 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gold/20 text-left font-serif text-lg text-gray-700 leading-loose relative">
+                <!-- Efeito de fita decorativa -->
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-wine/10 rounded-full blur-xl"></div>
+                
+                <h3 class="font-cursive text-4xl text-wine mb-6 text-center">Meu Amor,</h3>
+                
+                <!-- O texto abaixo será digitado pelo JS -->
+                <div id="typewriter-text" class="min-h-[250px]"></div>
+                
+                <!-- Texto que serve de fonte para a máquina de escrever. Você pode editar o texto aqui. -->
+                <div id="typewriter-source" class="hidden">
+                    Quando olho para trás e vejo tudo o que construímos nesses 9 anos, meu coração se enche de uma gratidão imensa. Você chegou e pintou minha vida com cores que eu nem sabia que existiam. Desse nosso amor tão bonito nasceu a nossa filha, o nosso maior tesouro, que nos uniu de uma forma ainda mais profunda e sagrada. Cada obstáculo superado, cada risada compartilhada, cada lágrima enxugada... tudo isso nos moldou e nos trouxe até aqui. Você é minha bússola, a fundação da nossa família e a minha maior alegria.<br><br>
+                    <span class='font-semibold text-wine italic'>Eu escolheria você em todas as vidas. Obrigado por esses 9 anos. Eu te amo infinitamente. ❤️</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CONTADOR DO AMOR -->
+    <section class="py-24 bg-wine text-white relative z-10 overflow-hidden">
+        <!-- Textura de fundo suave -->
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        
+        <div class="container mx-auto px-4 relative z-10 text-center reveal">
+            <h2 class="font-cursive text-5xl md:text-6xl text-gold mb-4">O Tempo do Nosso Amor</h2>
+            <p class="font-light text-lg text-pink-100 mb-12">Cada segundo ao seu lado é um presente precioso.</p>
+            
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6 font-serif">
+                <!-- Anos -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-28 md:w-36 flex flex-col items-center shadow-lg">
+                    <span id="count-years" class="text-4xl md:text-5xl font-bold text-gold">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2">Anos</span>
+                </div>
+                <!-- Meses -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-28 md:w-36 flex flex-col items-center shadow-lg">
+                    <span id="count-months" class="text-4xl md:text-5xl font-bold text-gold">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2">Meses</span>
+                </div>
+                <!-- Dias -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-28 md:w-36 flex flex-col items-center shadow-lg">
+                    <span id="count-days" class="text-4xl md:text-5xl font-bold text-gold">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2">Dias</span>
+                </div>
+                <!-- Horas -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-24 md:w-32 flex flex-col items-center shadow-lg">
+                    <span id="count-hours" class="text-3xl md:text-4xl font-bold text-white">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2 opacity-80">Horas</span>
+                </div>
+                <!-- Minutos -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-24 md:w-32 flex flex-col items-center shadow-lg">
+                    <span id="count-minutes" class="text-3xl md:text-4xl font-bold text-white">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2 opacity-80">Min.</span>
+                </div>
+                <!-- Segundos -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 md:p-6 w-24 md:w-32 flex flex-col items-center shadow-lg">
+                    <span id="count-seconds" class="text-3xl md:text-4xl font-bold text-white">0</span>
+                    <span class="text-xs md:text-sm uppercase tracking-wider mt-2 opacity-80">Seg.</span>
+                </div>
+            </div>
+            
+            <p class="mt-12 text-sm md:text-base font-light italic text-white/70">
+                Desde o dia 17 de Julho de 2017 até o infinito.
+            </p>
+        </div>
+    </section>
+
+    <!-- 6. MOTIVOS PELOS QUAIS EU TE AMO (FLIP CARDS) -->
+    <section class="py-24 bg-softpink relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-cursive text-5xl md:text-6xl text-wine mb-2">Por que eu te amo?</h2>
+                <div class="h-1 w-24 bg-gold mx-auto rounded-full"></div>
+                <p class="text-gray-500 mt-4 font-light">Passe o mouse ou toque nos cartões para descobrir.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto reveal">
+                
+                <!-- Cartão 1 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-smile text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Seu sorriso</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">É a luz que ilumina meus dias mais difíceis e a razão da minha própria alegria.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão 2 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-shield-heart text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Sua força</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">Admiro profundamente a forma corajosa como você enfrenta a vida e nunca desiste.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão 3 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-hands-holding-heart text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Seu carinho</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">O jeito que você cuida de mim e dos detalhes da nossa vida faz eu me sentir a pessoa mais amada do mundo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão 4 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-gem text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Seu coração</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">Gigante, bondoso e puro. Você sempre vê o melhor nas pessoas e no mundo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão 5 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-puzzle-piece text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Nossa cumplicidade</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">Nós nos entendemos apenas com um olhar. Somos a melhor equipe.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão 6 -->
+                <div class="flip-card cursor-pointer h-64 perspective-1000 group mx-auto w-full max-w-sm" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
+                        <div class="flip-card-front absolute inset-0 backface-hidden bg-white text-wine flex flex-col justify-center items-center shadow-lg rounded-2xl border border-gold/30">
+                            <i class="fas fa-home text-4xl mb-4 text-gold"></i>
+                            <h3 class="font-serif text-2xl font-semibold">Porque você é meu lar</h3>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 backface-hidden bg-wine text-white flex flex-col justify-center items-center shadow-lg rounded-2xl rotate-y-180 p-6 border border-white/20">
+                            <i class="fas fa-heart text-2xl mb-3 text-gold"></i>
+                            <p class="font-light text-lg">Não importa onde estejamos, meu verdadeiro lar é onde você está. ❤️</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. MENSAGEM FINAL -->
+    <section class="py-32 bg-white relative z-10 overflow-hidden text-center">
+        <!-- Ícones flutuantes decorativos -->
+        <i class="fas fa-heart absolute text-softpink opacity-50 top-10 left-10 text-6xl animate-pulse"></i>
+        <i class="fas fa-heart absolute text-softpink opacity-50 bottom-10 right-10 text-8xl animate-bounce" style="animation-duration: 4s;"></i>
+        <i class="fas fa-star absolute text-gold opacity-30 top-20 right-20 text-4xl animate-spin-slow"></i>
+
+        <div class="container mx-auto px-4 max-w-4xl reveal">
+            <h2 class="font-cursive text-6xl md:text-7xl text-wine mb-8">Meu Bem,</h2>
+            <p class="font-serif text-xl md:text-3xl text-gray-700 leading-relaxed font-light mb-12">
+                "Obrigado por caminhar ao meu lado durante esses 9 anos. Cada dia ao seu lado vale mais do que qualquer sonho que eu poderia imaginar. Você é o amor da minha vida e sempre será. Feliz 9 anos de nós. Eu te amo para sempre. ❤️"
+            </p>
+            
+            <!-- 9. BOTÃO FINAL (SURPRESA) -->
+            <button id="btn-surprise" class="mt-8 bg-gold text-white px-10 py-5 rounded-full font-serif text-xl tracking-wider shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:bg-wine hover:shadow-[0_0_20px_rgba(114,47,55,0.6)] transition-all duration-500 hover:scale-105 btn-pulse">
+                Clique aqui para descobrir a última surpresa ❤️
+            </button>
+        </div>
+    </section>
+
+    <!-- TELA DA SURPRESA (Escondida) -->
+    <div id="surprise-screen" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center text-center px-4 opacity-0 transition-opacity duration-1000">
+        <!-- Canvas para Fogos de Artifício -->
+        <canvas id="fireworks-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+        
+        <div class="relative z-10 max-w-4xl transform scale-50 opacity-0 transition-all duration-1000" id="surprise-content">
+            <i class="fas fa-ring text-6xl text-gold mb-6 animate-bounce"></i>
+            <h1 class="font-cursive text-5xl md:text-7xl lg:text-8xl text-white mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                Quer continuar escrevendo essa linda história comigo por toda a vida?
+            </h1>
+            <p class="font-sans text-xl text-gold font-light mt-8 tracking-widest uppercase">
+                (A resposta eu já sei, mas sempre é bom lembrar o quanto eu te amo)
+            </p>
+            <button onclick="closeSurprise()" class="mt-12 text-white/50 hover:text-white border border-white/30 px-6 py-2 rounded-full transition-colors">
+                Voltar à página
+            </button>
+        </div>
+    </div>
+
+
+    <!-- SCRIPTS JS -->
+    <script>
+        // --- 1. MÚSICA DE FUNDO ---
+        const audio = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const musicIcon = musicToggle.querySelector('i');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.classList.remove('fa-pause');
+                musicIcon.classList.add('fa-play');
+            } else {
+                audio.play().catch(e => console.log("Interação necessária para tocar áudio."));
+                musicIcon.classList.remove('fa-play');
+                musicIcon.classList.add('fa-pause');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // --- 2. SCROLL REVEAL (Fade-in) ---
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // --- 3. EFEITO MÁQUINA DE ESCREVER ---
+        const typewriterSource = document.getElementById('typewriter-source').innerHTML;
+        const typewriterContainer = document.getElementById('typewriter-text');
+        const letterSection = document.getElementById('letter-section');
+        let isTypingStarted = false;
+        let index = 0;
+        
+        // Remove tags HTML temporariamente para contar e digitar corretamente, mas como temos tags HTML,
+        // faremos uma abordagem baseada em caracteres HTML.
+        function typeWriterEffect() {
+            if (index < typewriterSource.length) {
+                // Se for uma tag HTML (ex: <br>, <span>), adiciona inteira imediatamente
+                if (typewriterSource.charAt(index) === '<') {
+                    let tag = "";
+                    while(typewriterSource.charAt(index) !== '>' && index < typewriterSource.length){
+                        tag += typewriterSource.charAt(index);
+                        index++;
+                    }
+                    tag += '>';
+                    typewriterContainer.innerHTML += tag;
+                    index++;
+                    typeWriterEffect(); // Chama imediatamente sem delay para tags
+                } else {
+                    typewriterContainer.innerHTML += typewriterSource.charAt(index);
+                    index++;
+                    setTimeout(typeWriterEffect, 30); // Velocidade da digitação (ms)
+                }
+            } else {
+                // Adiciona o cursor piscando ao final
+                typewriterContainer.innerHTML += '<span class="typewriter-cursor"></span>';
+            }
+        }
+
+        const letterObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !isTypingStarted) {
+                isTypingStarted = true;
+                setTimeout(typeWriterEffect, 500); // Delay após aparecer na tela
+            }
+        }, { threshold: 0.5 });
+        letterObserver.observe(letterSection);
+
+        // --- 4. CONTADOR DO AMOR EXATO ---
+        // DATA DE INÍCIO: 17 de Julho de 2017
+        const startDate = new Date('2017-07-17T00:00:00');
+
+        function updateCounter() {
+            const now = new Date();
+            
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+
+            if (seconds < 0) { seconds += 60; minutes--; }
+            if (minutes < 0) { minutes += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) {
+                const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += previousMonth.getDate();
+                months--;
+            }
+            if (months < 0) { months += 12; years--; }
+
+            document.getElementById('count-years').innerText = years;
+            document.getElementById('count-months').innerText = months;
+            document.getElementById('count-days').innerText = days;
+            document.getElementById('count-hours').innerText = hours;
+            document.getElementById('count-minutes').innerText = minutes;
+            document.getElementById('count-seconds').innerText = seconds;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // --- 5. LIGHTBOX DA GALERIA ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(element) {
+            const imgSrc = element.querySelector('img').src;
+            lightboxImg.src = imgSrc;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            // Pequeno delay para animação de fade
+            setTimeout(() => {
+                lightbox.classList.remove('opacity-0');
+                lightboxImg.classList.remove('scale-95');
+                lightboxImg.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Evita rolagem
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('opacity-0');
+            lightboxImg.classList.remove('scale-100');
+            lightboxImg.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.remove('flex');
+                lightbox.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Fechar ao clicar fora da imagem
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // --- 6. TRILHA DO MOUSE (CORAÇÕES) ---
+        document.addEventListener('mousemove', function(e) {
+            // Limita a criação para não pesar o navegador (só cria 1 a cada X pixels ou tempo, aqui faremos simples com probabilidade)
+            if(Math.random() > 0.8) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'cursor-heart';
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+                
+                // Variação de tamanho e cor sutil
+                const size = Math.random() * 0.5 + 0.8;
+                heart.style.transform = `scale(${size})`;
+                
+                document.body.appendChild(heart);
+                
+                // Remove após a animação (1s)
+                setTimeout(() => {
+                    heart.remove();
+                }, 1000);
+            }
+        });
+
+        // --- 7. PARTÍCULAS DE FUNDO (Canvas Hearts) ---
+        const bgCanvas = document.getElementById('particles-bg');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgParticles = [];
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        class HeartParticle {
+            constructor() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = Math.random() * bgCanvas.height - bgCanvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speed = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.3 + 0.1; // Sutil
+            }
+            update() {
+                this.y += this.speed;
+                // Movimento lateral leve (vento)
+                this.x += Math.sin(this.y * 0.01) * 0.5;
+                if (this.y > bgCanvas.height) {
+                    this.y = -this.size;
+                    this.x = Math.random() * bgCanvas.width;
+                }
+            }
+            draw() {
+                bgCtx.save();
+                bgCtx.globalAlpha = this.opacity;
+                bgCtx.fillStyle = '#ffb6c1'; // Soft pink / rosa claro
+                bgCtx.translate(this.x, this.y);
+                bgCtx.scale(this.size / 30, this.size / 30);
+                // Desenhar forma de coração
+                bgCtx.beginPath();
+                bgCtx.moveTo(15, 10);
+                bgCtx.bezierCurveTo(15, 9.5, 15, 6, 10, 6);
+                bgCtx.bezierCurveTo(4, 6, 4, 13.5, 4, 13.5);
+                bgCtx.bezierCurveTo(4, 19, 10, 25, 15, 30);
+                bgCtx.bezierCurveTo(20, 25, 26, 19, 26, 13.5);
+                bgCtx.bezierCurveTo(26, 13.5, 26, 6, 20, 6);
+                bgCtx.bezierCurveTo(15, 6, 15, 9.5, 15, 10);
+                bgCtx.fill();
+                bgCtx.restore();
+            }
+        }
+
+        // Criar corações
+        for (let i = 0; i < 30; i++) {
+            bgParticles.push(new HeartParticle());
+        }
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgParticles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // --- 8. TELA SURPRESA FINAL (Fogos de Artifício) ---
+        const btnSurprise = document.getElementById('btn-surprise');
+        const surpriseScreen = document.getElementById('surprise-screen');
+        const surpriseContent = document.getElementById('surprise-content');
+        let fireworksAnimId;
+
+        btnSurprise.addEventListener('click', () => {
+            surpriseScreen.classList.remove('hidden');
+            surpriseScreen.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            
+            // Fade in tela
+            setTimeout(() => {
+                surpriseScreen.classList.remove('opacity-0');
+            }, 50);
+
+            // Pop in texto
+            setTimeout(() => {
+                surpriseContent.classList.remove('scale-50', 'opacity-0');
+                surpriseContent.classList.add('scale-100', 'opacity-100');
+            }, 500);
+
+            // Iniciar fogos
+            startFireworks();
+        });
+
+        function closeSurprise() {
+            surpriseContent.classList.remove('scale-100', 'opacity-100');
+            surpriseContent.classList.add('scale-50', 'opacity-0');
+            surpriseScreen.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                surpriseScreen.classList.remove('flex');
+                surpriseScreen.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                cancelAnimationFrame(fireworksAnimId);
+            }, 1000);
+        }
+
+        // --- LÓGICA DOS FOGOS DE ARTIFÍCIO ---
+        const fwCanvas = document.getElementById('fireworks-canvas');
+        const fwCtx = fwCanvas.getContext('2d');
+        
+        function resizeFwCanvas() {
+            fwCanvas.width = window.innerWidth;
+            fwCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeFwCanvas);
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * fwCanvas.width;
+                this.y = fwCanvas.height;
+                this.sx = Math.random() * 3 - 1.5;
+                this.sy = Math.random() * -3 - 7;
+                this.size = 2;
+                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                this.particles = [];
+                this.exploded = false;
+            }
+            update() {
+                if (!this.exploded) {
+                    this.x += this.sx;
+                    this.y += this.sy;
+                    this.sy += 0.05; // Gravidade
+                    if (this.sy >= -2 || this.y < fwCanvas.height * 0.2) {
+                        this.explode();
+                    }
+                }
+            }
+            explode() {
+                this.exploded = true;
+                for (let i = 0; i < 50; i++) {
+                    this.particles.push(new Particle(this.x, this.y, this.color));
+                }
+            }
+            draw() {
+                if (!this.exploded) {
+                    fwCtx.beginPath();
+                    fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    fwCtx.fillStyle = this.color;
+                    fwCtx.fill();
+                }
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 1;
+                this.sx = Math.cos(angle) * speed;
+                this.sy = Math.sin(angle) * speed;
+                this.size = Math.random() * 2 + 1;
+                this.color = color;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.015;
+            }
+            update() {
+                this.x += this.sx;
+                this.y += this.sy;
+                this.sy += 0.05; // Gravidade partículas
+                this.alpha -= this.decay;
+            }
+            draw() {
+                fwCtx.save();
+                fwCtx.globalAlpha = this.alpha;
+                fwCtx.beginPath();
+                fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fwCtx.fillStyle = this.color;
+                fwCtx.fill();
+                fwCtx.restore();
+            }
+        }
+
+        let fireworks = [];
+
+        function startFireworks() {
+            resizeFwCanvas();
+            fireworks = [];
+            animateFireworks();
+        }
+
+        function animateFireworks() {
+            fwCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+            if (Math.random() < 0.05) {
+                fireworks.push(new Firework());
+            }
+
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const fw = fireworks[i];
+                if (!fw.exploded) {
+                    fw.update();
+                    fw.draw();
+                } else {
+                    for (let j = fw.particles.length - 1; j >= 0; j--) {
+                        const p = fw.particles[j];
+                        p.update();
+                        p.draw();
+                        if (p.alpha <= 0) fw.particles.splice(j, 1);
+                    }
+                    if (fw.particles.length === 0) fireworks.splice(i, 1);
+                }
+            }
+            fireworksAnimId = requestAnimationFrame(animateFireworks);
+        }
+
+    </script>
+</body>
+</html>
